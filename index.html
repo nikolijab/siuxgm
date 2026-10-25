@@ -19,7 +19,7 @@
     --promo-a:rgba(197,166,83,.18); --promo-b:rgba(197,166,83,.07);
     --bean:#7A5230; --crease:#2B1C0F; --bean-hl:rgba(255,226,180,.16);
     --logo-shadow:drop-shadow(0 3px 8px rgba(90,66,20,.28)); --logo-shadow-sm:drop-shadow(0 2px 5px rgba(90,66,20,.25));
-    --pill-shadow:0 4px 14px rgba(197,166,83,.35); --link-hover:#5C4512;
+    --pill-shadow:none; --link-hover:#5C4512;
   color-scheme: light;
 }
 *{box-sizing:border-box}
@@ -55,7 +55,8 @@ nav{position:sticky;top:0;z-index:5;background:var(--nav);-webkit-backdrop-filte
 .nav-logo{display:flex;justify-content:center;padding-top:14px}
 .nav-logo div{position:relative;width:clamp(104px,32vw,136px)}
 .nav-logo .logo-img{display:block;width:100%;height:auto;filter:var(--logo-shadow-sm)}
-.pills{max-width:560px;margin:0 auto;padding:12px clamp(16px,5vw,24px);display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+.pills-wrap{max-width:560px;margin:0 auto;padding:10px clamp(16px,5vw,24px) 12px}
+.pills{padding:2px 24px 2px 0;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
 .pills::-webkit-scrollbar{display:none}
 .pill{flex:none;scroll-snap-align:start;min-height:44px;padding:0 18px;border-radius:999px;font:600 14px 'Manrope',system-ui,sans-serif;white-space:nowrap;cursor:pointer;background:transparent;color:var(--text);border:1px solid rgba(var(--ink),.26);transition:background .25s,color .25s,border-color .25s,transform .15s}
 .pill:active{transform:scale(.96)}
@@ -170,7 +171,7 @@ footer small{font-size:12px;color:rgba(var(--ink),.66);text-align:center}
     <img class="logo-img" src="logo.png" alt="Siux M caffe">
     <span class="logo-shine" aria-hidden="true"></span>
   </div></div>
-  <div class="pills" id="pills"></div>
+  <div class="pills-wrap"><div class="pills" id="pills"></div></div>
 </nav>
 
 <main id="main" class="pre">
@@ -395,10 +396,30 @@ function select(id, btn) {
   document.getElementById('promo').hidden = id !== 'sve';
   setDelays(id);
   replay();
-  if (btn && btn.scrollIntoView) btn.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
-  var top = document.querySelector('.hero').offsetHeight;
+  if (btn && btn.scrollIntoView) btn.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' });
+  var top = heroGone ? 0 : hero.offsetHeight;
   if (Math.abs(window.scrollY - top) > 2) window.scrollTo({ top: top, behavior: 'smooth' });
 }
+
+/* kad uvodni ekran ode skroz gore, uklanja se — gost se više ne vraća na njega */
+var hero = document.querySelector('.hero'), heroGone = false;
+function onScroll() {
+  if (heroGone) return;
+  var h = hero.offsetHeight, y = window.scrollY;
+  if (y >= h - 1) {
+    heroGone = true;
+    hero.hidden = true;
+    window.scrollTo({ top: Math.max(0, y - h), behavior: 'instant' });
+    window.removeEventListener('scroll', onScroll);
+  }
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+
+/* "Pogledaj meni" — glatko do menija, bez #meni u adresi */
+document.querySelector('.scroll-cue').addEventListener('click', function (e) {
+  e.preventDefault();
+  window.scrollTo({ top: hero.offsetHeight, behavior: 'smooth' });
+});
 
 /* meni se pojavljuje kad se skroluje do njega */
 function setupReveal() {
