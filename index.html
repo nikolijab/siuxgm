@@ -3,102 +3,178 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#252525">
-<!-- Stranica je već tamna: browser je ne sme sam zatamnjivati/invertovati u dark modu -->
-<meta name="color-scheme" content="dark">
-<meta name="supported-color-schemes" content="dark">
+<meta name="theme-color" content="#F4EDE0">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
 <title>Siux M caffe – digitalni meni</title>
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Kapakana:wght@400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#252525; --gold:#C5A653; --cream:#E3D9C5; --cream-2:#EDE4D3;
-    --muted:rgba(227,217,197,0.66); --line:rgba(227,217,197,0.12);
-    color-scheme: dark;
-  }
-  html,body{background:#252525}
-  img{color-scheme:dark}
-  @media (prefers-color-scheme: dark){ html,body{background:#252525;color:#E3D9C5} }
-  @media (prefers-color-scheme: light){ html,body{background:#252525;color:#E3D9C5} }
-  *{box-sizing:border-box}
-  [hidden]{display:none!important}
-  html{-webkit-text-size-adjust:100%}
-  body{margin:0;background:var(--bg);color:var(--cream);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-  p,h1,h2,h3,ul{margin:0}
+:root{
+    --bg:#F4EDE0; --bg-top:#FBF6EC; --text:#2A2119; --name:#2A2119; --ink:42,33,25;
+    --nav:rgba(244,237,224,.9); --gold:#C5A653; --gold-ink:#76591A; --on-gold:#2A2119;
+    --card:#FBF8F1; --card-border:rgba(197,166,83,.28); --card-shadow:0 6px 22px -14px rgba(90,66,20,.35);
+    --promo-a:rgba(197,166,83,.18); --promo-b:rgba(197,166,83,.07);
+    --bean:#7A5230; --crease:#2B1C0F; --bean-hl:rgba(255,226,180,.16);
+    --logo-shadow:drop-shadow(0 3px 8px rgba(90,66,20,.28)); --logo-shadow-sm:drop-shadow(0 2px 5px rgba(90,66,20,.25));
+    --pill-shadow:0 4px 14px rgba(197,166,83,.35); --link-hover:#5C4512;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;background:var(--bg)}
+body{margin:0;min-height:100vh;color:var(--text);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(120% 420px at 50% 0%,var(--bg-top) 0%,var(--bg) 70%) var(--bg);background-repeat:no-repeat;padding-bottom:env(safe-area-inset-bottom)}
+p,h1,h2,h3,ul{margin:0}
+a{color:var(--gold-ink)}a:hover{color:var(--link-hover)}
+.gold{color:var(--gold-ink)}
+.muted{color:rgba(var(--ink),.66)}
 
-  header{padding:36px 20px 8px;display:flex;flex-direction:column;align-items:center}
-  header img{width:132px;height:auto;display:block}
-  .script{font-family:'Kapakana',cursive;font-size:34px;line-height:1;color:var(--cream);margin-top:4px;letter-spacing:.5px}
+/* ===== uvodni ekran ===== */
+.hero{position:relative;overflow:hidden;min-height:100vh;min-height:min(100svh,900px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px 120px}
+.hero-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:14px}
+.logo-wrap{position:relative;width:clamp(190px,58vw,250px);animation:logoIn 1.1s cubic-bezier(.2,.8,.2,1) both}
+.logo-wrap .logo-img{position:relative;display:block;width:100%;height:auto;filter:var(--logo-shadow)}
+.logo-shine{position:absolute;inset:0;pointer-events:none;-webkit-mask-image:url(logo.png);mask-image:url(logo.png);-webkit-mask-size:100% 100%;mask-size:100% 100%;background:linear-gradient(110deg,transparent 35%,rgba(255,246,214,.9) 50%,transparent 65%);background-size:300% 100%;background-position:150% 0;animation:shine 5s ease-in-out 1.2s infinite}
+.halo{position:absolute;left:50%;top:50%;width:150%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(197,166,83,.16),transparent);animation:breathe 6s ease-in-out infinite;pointer-events:none}
+.script{font-family:'Kapakana',cursive;line-height:1;letter-spacing:.5px}
+.hero .script{font-size:clamp(38px,11vw,48px);color:var(--text)}
+.fade-up{animation:fadeUp .9s cubic-bezier(.2,.8,.2,1) both}
+.scroll-cue{position:absolute;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%);min-height:44px;display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--gold-ink);font-size:11px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;animation-delay:1.2s;z-index:1}
+.chev{animation:bob 1.8s ease-in-out infinite}
 
-  nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid rgba(227,217,197,0.14)}
-  .pills{max-width:560px;margin:0 auto;display:flex;gap:8px;overflow-x:auto;padding:14px 20px;scrollbar-width:none}
-  .pills::-webkit-scrollbar{display:none}
-  .pill{flex:none;min-height:44px;padding:0 18px;border-radius:999px;font:600 14px 'Manrope',system-ui,sans-serif;white-space:nowrap;cursor:pointer;background:transparent;color:var(--cream);border:1px solid rgba(227,217,197,0.37);transition:background .15s,color .15s}
-  .pill[aria-pressed="true"]{background:var(--gold);color:var(--bg);border-color:var(--gold)}
-  .pill:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+/* zrna kafe */
+.beans{position:absolute;inset:0;pointer-events:none;z-index:0}
+.bean{position:absolute;top:-60px;aspect-ratio:24/32;opacity:var(--o);filter:blur(var(--blur));animation:fall var(--dur) linear var(--delay) infinite;will-change:transform}
+.bean svg{display:block;width:100%;height:100%}
 
-  main{max-width:560px;margin:0 auto;padding:24px 20px 64px;display:flex;flex-direction:column;gap:44px}
+/* ===== traka: logo + filteri ===== */
+nav{position:sticky;top:0;z-index:5;background:var(--nav);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid rgba(var(--ink),.1)}
+.nav-logo{display:flex;justify-content:center;padding-top:14px}
+.nav-logo div{position:relative;width:clamp(104px,32vw,136px)}
+.nav-logo .logo-img{display:block;width:100%;height:auto;filter:var(--logo-shadow-sm)}
+.pills{max-width:560px;margin:0 auto;padding:12px clamp(16px,5vw,24px);display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+.pills::-webkit-scrollbar{display:none}
+.pill{flex:none;scroll-snap-align:start;min-height:44px;padding:0 18px;border-radius:999px;font:600 14px 'Manrope',system-ui,sans-serif;white-space:nowrap;cursor:pointer;background:transparent;color:var(--text);border:1px solid rgba(var(--ink),.26);transition:background .25s,color .25s,border-color .25s,transform .15s}
+.pill:active{transform:scale(.96)}
+.pill[aria-pressed="true"]{background:var(--gold);color:var(--on-gold);border-color:var(--gold);box-shadow:var(--pill-shadow)}
+.pill:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
-  /* Akcija */
-  .promo{position:relative;border:1px solid var(--gold);border-radius:22px;padding:30px 22px 26px;background:rgba(197,166,83,0.08);display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
-  .promo::before{content:"";position:absolute;inset:6px;border:1px solid rgba(197,166,83,0.32);border-radius:17px;pointer-events:none}
-  .promo-head{display:flex;flex-direction:column;align-items:center;gap:6px}
-  .promo-title{display:flex;align-items:center;gap:12px}
-  .dia{width:7px;height:7px;background:var(--gold);transform:rotate(45deg);flex:none}
-  .bar{width:34px;height:1px;background:var(--gold)}
-  .promo h2{font-family:'DM Serif Display',serif;font-weight:400;font-size:32px;line-height:1;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
-  .promo-sub{font-size:11px;font-weight:600;letter-spacing:2.2px;text-transform:uppercase;color:rgba(227,217,197,0.7)}
-  .combo{display:flex;align-items:center;justify-content:center;gap:16px;width:100%}
-  .combo-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
-  .combo-item .n{font-family:'DM Serif Display',serif;font-size:24px;line-height:1.1;color:var(--cream-2)}
-  .combo-item .s{font-size:12px;color:var(--muted)}
-  .plus{flex:none;width:38px;height:38px;border-radius:999px;background:var(--gold);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;line-height:1}
-  .dash{width:100%;border-top:1px dashed rgba(197,166,83,0.4)}
-  .promo-price{font-family:'DM Serif Display',serif;font-size:46px;line-height:1;color:var(--gold)}
-  .promo-price span{font-family:'Manrope',sans-serif;font-size:16px;font-weight:600}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
 
-  /* Sekcije */
-  section.cat{display:flex;flex-direction:column;gap:28px}
-  .cat-head{display:flex;align-items:center;gap:14px}
-  .cat-head .ln{flex:1;height:1px;background:rgba(197,166,83,0.45)}
-  .cat-head h2{font-family:'DM Serif Display',serif;font-weight:400;font-size:25px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);text-align:center}
-  .group{display:flex;flex-direction:column;gap:4px}
-  .group h3{margin-bottom:6px;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
-  .row{padding:11px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
-  .row-main{display:flex;align-items:baseline;gap:10px}
-  .row .n{font-size:16px;font-weight:500;color:var(--cream-2);line-height:1.3}
-  .row .s{font-size:12px;color:var(--muted);white-space:nowrap}
-  .row .dots{flex:1;min-width:16px;border-bottom:1px dotted rgba(227,217,197,0.3);transform:translateY(-4px)}
-  .row .p{white-space:nowrap;color:var(--gold);font-weight:600;font-size:16px}
-  .row .p span{font-size:11px;font-weight:500}
-  .row .d{font-size:13px;line-height:1.5;color:var(--muted)}
-  .premium{list-style:none;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px}
-  .premium li{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
-  .premium .dia{width:6px;height:6px}
-  .premium span:last-child{font-size:15px;font-weight:500;line-height:1.3;color:var(--cream-2)}
+/* ===== meni ===== */
+main{min-height:100vh;min-height:100svh;max-width:560px;margin:0 auto;padding:26px clamp(16px,5vw,24px) 64px;display:flex;flex-direction:column;gap:40px}
+#menu{display:flex;flex-direction:column;gap:40px}
+.dia{width:7px;height:7px;background:var(--gold);transform:rotate(45deg);flex:none}
 
-  footer{display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:8px}
-  footer .ln{width:40px;height:1px;background:rgba(197,166,83,0.6)}
-  footer .script{font-size:28px;color:var(--gold);margin:0}
-  footer small{font-size:12px;color:var(--muted)}
+.promo{position:relative;overflow:hidden;border:1px solid var(--gold);border-radius:24px;padding:30px 20px 26px;background:linear-gradient(180deg,var(--promo-a),var(--promo-b));display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
+.promo::after{content:"";position:absolute;top:0;bottom:0;width:45%;left:-60%;background:linear-gradient(100deg,transparent,rgba(197,166,83,.16),transparent);transform:skewX(-12deg);animation:sweep 4.5s ease-in-out 1s infinite;pointer-events:none}
+.promo-head{display:flex;flex-direction:column;align-items:center;gap:6px}
+.promo-title{display:flex;align-items:center;gap:12px}
+.bar{width:30px;height:1px;background:var(--gold)}
+.promo h2{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(28px,8vw,34px);line-height:1;letter-spacing:4px;text-transform:uppercase;color:var(--gold-ink)}
+.promo-sub{font-size:11px;font-weight:600;letter-spacing:2.2px;text-transform:uppercase;color:rgba(var(--ink),.72)}
+.combo{display:flex;align-items:center;justify-content:center;gap:14px;width:100%}
+.combo-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.combo-item .n{font-family:'DM Serif Display',serif;font-size:clamp(21px,6vw,25px);line-height:1.1;color:var(--name)}
+.combo-item .s{font-size:12px;color:rgba(var(--ink),.66)}
+.plus{position:relative;flex:none;width:38px;height:38px;border-radius:999px;background:var(--gold);color:var(--on-gold);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;line-height:1}
+.plus::before{content:"";position:absolute;inset:0;border-radius:999px;border:1px solid var(--gold);animation:ring 2.4s ease-out infinite}
+.dash{width:100%;border-top:1px dashed rgba(197,166,83,.42)}
+.promo-price{font-family:'DM Serif Display',serif;font-size:clamp(40px,12vw,48px);line-height:1;color:var(--gold-ink)}
+.promo-price span{font-family:'Manrope',sans-serif;font-size:16px;font-weight:600}
 
+section.cat{display:flex;flex-direction:column;gap:18px}
+.cat-head{display:flex;align-items:center;gap:14px}
+.cat-head .ln{flex:1;height:1px;background:rgba(197,166,83,.45)}
+.cat-head h2{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(22px,6.4vw,26px);letter-spacing:1px;text-transform:uppercase;color:var(--gold-ink);text-align:center;text-wrap:balance}
+.group{background:var(--card);border:1px solid var(--card-border);box-shadow:var(--card-shadow);border-radius:20px;padding:18px clamp(14px,4.5vw,20px) 8px;display:flex;flex-direction:column}
+.group-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.group-head .dia{width:6px;height:6px}
+.group h3{flex:1;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-ink)}
+.chip{white-space:nowrap;color:var(--on-gold);background:var(--gold);border-radius:999px;padding:4px 10px;font-weight:700;font-size:13px}
+.chip span{font-size:10px;font-weight:600}
+.row{padding:12px 0;border-bottom:1px solid rgba(var(--ink),.1);display:flex;flex-direction:column;gap:4px;transition:background .2s}
+.row:last-child{border-bottom:none}
+.row:active{background:rgba(197,166,83,.07)}
+.row-main{display:flex;align-items:baseline;gap:8px}
+.row .n{font-size:clamp(15px,4.2vw,16.5px);font-weight:500;color:var(--name);line-height:1.3}
+.row .s{flex:none;font-size:11px;font-weight:600;color:rgba(var(--ink),.72);border:1px solid rgba(var(--ink),.2);border-radius:999px;padding:1px 7px;white-space:nowrap}
+.row .dots{flex:1;min-width:14px;border-bottom:1px dotted rgba(var(--ink),.28);transform:translateY(-4px)}
+.row .p{white-space:nowrap;color:var(--gold-ink);font-weight:700;font-size:16px}
+.row .p span{font-size:11px;font-weight:500}
+.row .d{font-size:13px;line-height:1.5;color:rgba(var(--ink),.66)}
+.premium{list-style:none;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}
+.premium li{display:flex;align-items:center;gap:9px;padding:12px 0;border-bottom:1px solid rgba(var(--ink),.1)}
+.premium .dia{width:5px;height:5px}
+.premium li span:last-child{font-size:15px;font-weight:500;line-height:1.3;color:var(--name)}
+
+footer{display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:6px}
+footer .ln{width:40px;height:1px;background:rgba(197,166,83,.6)}
+footer .script{font-size:30px;line-height:1.1;color:var(--gold-ink)}
+footer small{font-size:12px;color:rgba(var(--ink),.66);text-align:center}
+
+/* ulaz stavki */
+.pre .rv{opacity:0}
+.v0 .rv{animation:up0 .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d)}
+.v1 .rv{animation:up1 .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d)}
+
+@supports (animation-timeline: view()){
+  .hero-inner{animation:heroOut linear both;animation-timeline:view();animation-range:exit 0% exit 90%}
+  .scroll-cue{animation:cueOut linear both!important;animation-timeline:view()!important;animation-range:exit 0% exit 30%!important}
+}
+
+@keyframes logoIn{from{opacity:0;transform:scale(.82) rotate(-6deg)}to{opacity:1;transform:none}}
+@keyframes shine{0%{background-position:150% 0}45%,100%{background-position:-50% 0}}
+@keyframes breathe{0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(.92)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.04)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+@keyframes fall{from{transform:translate3d(0,0,0) rotate(var(--r))}to{transform:translate3d(var(--dx),calc(min(100svh,900px) + 120px),0) rotate(calc(var(--r) + 300deg))}}
+@keyframes sweep{0%{left:-60%}55%,100%{left:130%}}
+@keyframes ring{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.7);opacity:0}}
+@keyframes up0{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes up1{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes heroOut{to{opacity:0;transform:translateY(-60px) scale(.88)}}
+@keyframes cueOut{to{opacity:0}}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal,.pre .rv{opacity:1;transform:none}
+  .beans{display:none}
+}
 </style>
 </head>
 <body>
 
-<header>
-  <img id="logo" src="logo.png" alt="Siux M caffe">
-  <p class="script">digital menu</p>
+<header class="hero">
+  <div class="beans" id="beans" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div class="logo-wrap">
+      <span class="halo" aria-hidden="true"></span>
+      <img class="logo-img" src="logo.png" alt="Siux M caffe">
+      <span class="logo-shine" aria-hidden="true"></span>
+    </div>
+    <p class="script fade-up" style="animation-delay:.6s">digital menu</p>
+  </div>
+  <a href="#meni" class="scroll-cue fade-up">
+    <span>Pogledaj meni</span>
+    <svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+  </a>
 </header>
 
-<nav aria-label="Kategorije">
+<nav id="meni" class="reveal" aria-label="Kategorije">
+  <div class="nav-logo"><div>
+    <img class="logo-img" src="logo.png" alt="Siux M caffe">
+    <span class="logo-shine" aria-hidden="true"></span>
+  </div></div>
   <div class="pills" id="pills"></div>
 </nav>
 
-<main>
-  <section class="promo" id="promo" aria-label="Akcija">
+<main id="main" class="pre">
+  <section class="promo rv" id="promo" aria-label="Akcija" style="--d:0ms">
     <div class="promo-head">
       <div class="promo-title">
         <span class="dia" aria-hidden="true"></span><span class="bar" aria-hidden="true"></span>
@@ -109,14 +185,14 @@
     </div>
     <div class="combo">
       <div class="combo-item"><p class="n">Cedevita</p><p class="s">0,25</p></div>
-      <span class="plus" aria-hidden="true"><span>+</span></span>
+      <span class="plus" aria-hidden="true">+</span>
       <div class="combo-item"><p class="n">Espresso</p><p class="s">kafa</p></div>
     </div>
     <span class="dash" aria-hidden="true"></span>
     <p class="promo-price">305 <span>RSD</span></p>
   </section>
 
-  <div id="menu" style="display:flex;flex-direction:column;gap:44px"></div>
+  <div id="menu"></div>
 
   <footer>
     <span class="ln" aria-hidden="true"></span>
@@ -150,8 +226,8 @@ var MENU = [
   ] },
   { id: 'dezerti', title: 'Dezerti', groups: [
     { title: 'Sladoled', items: [
-      I('Frikom', '50 g', '', 'jagoda, čokolada, lešnik, straćatela, vanila, šumsko voće, jogurt, višnja, plazma, malaga') ] },
-    { title: 'Premium sladoled', items: [], premium: ['Badem slana karamela', 'Čokolada malina', 'Orah med', 'Triple obsession', 'Unicorn rocket', 'Kokos'] }
+      I('Frikom', '50 g', '130', 'jagoda, čokolada, lešnik, straćatela, vanila, šumsko voće, jogurt, višnja, plazma, malaga') ] },
+    { title: 'Premium sladoled', price: '130', items: [], premium: ['Badem slana karamela', 'Čokolada malina', 'Orah med', 'Triple obsession', 'Unicorn rocket', 'Kokos'] }
   ] },
   { id: 'alko', title: 'Alkoholna pića', groups: [
     { title: 'Cider', items: [ I('Somersby mango', '0,33', '360'), I('Somersby borovnica', '0,33', '360') ] },
@@ -195,6 +271,15 @@ var MENU = [
 
 var FILTERS = [['sve', 'Sve'], ['topli', 'Topli & hladni napici'], ['dezerti', 'Dezerti'], ['alko', 'Alkoholna pića'], ['bezalko', 'Bezalkoholna pića']];
 
+/* zrna kafe: [levo %, veličina px, trajanje s, kašnjenje s, rotacija°, pomeraj px, providnost, zamućenje px] */
+var BEANS = [
+  [4,16,9.5,0,20,18,.55,0],[14,24,7.8,-3.1,-40,-14,.8,0],[23,12,11.2,-6.4,70,22,.38,1.2],
+  [33,20,8.6,-1.6,10,-10,.7,0],[44,14,10.4,-7.8,-80,16,.45,.8],[52,26,7.2,-4.4,35,8,.85,0],
+  [61,13,12.0,-2.2,120,-20,.35,1.4],[70,21,8.9,-5.6,-25,12,.75,0],[79,15,10.1,-0.8,60,-16,.5,.6],
+  [88,23,7.6,-6.9,-55,10,.8,0],[95,12,11.6,-3.9,15,20,.4,1.2],[9,18,9.9,-8.6,95,-12,.6,.3],
+  [39,11,12.6,-9.8,-10,14,.3,1.6],[66,17,9.2,-8.2,45,-18,.6,.3],[57,10,13.0,-11.0,-60,12,.28,1.8]
+];
+
 /* ===== prikaz ===== */
 function el(tag, cls, text) {
   var e = document.createElement(tag);
@@ -202,27 +287,48 @@ function el(tag, cls, text) {
   if (text != null) e.textContent = text;
   return e;
 }
+function hide(e) { e.setAttribute('aria-hidden', 'true'); return e; }
 
+function buildBeans() {
+  var box = document.getElementById('beans');
+  var svg = '<svg viewBox="0 0 24 32" aria-hidden="true"><ellipse cx="12" cy="16" rx="10.5" ry="14.5" fill="var(--bean)"/><ellipse cx="8.5" cy="11" rx="4" ry="6.5" fill="var(--bean-hl)"/><path d="M12.5 3.5 C 7.5 10, 17 21.5, 11.5 28.5" stroke="var(--crease)" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>';
+  BEANS.forEach(function (b) {
+    var s = el('span', 'bean');
+    s.style.cssText = 'left:' + b[0] + '%;width:' + b[1] + 'px;--dur:' + b[2] + 's;--delay:' + b[3] + 's;--r:' + b[4] + 'deg;--dx:' + b[5] + 'px;--o:' + b[6] + ';--blur:' + b[7] + 'px';
+    s.innerHTML = svg;
+    box.appendChild(s);
+  });
+}
+
+var sections = [];
 function buildMenu() {
   var root = document.getElementById('menu');
   MENU.forEach(function (cat) {
     var sec = el('section', 'cat');
     sec.dataset.cat = cat.id;
-    var head = el('div', 'cat-head');
-    head.appendChild(el('span', 'ln')).setAttribute('aria-hidden', 'true');
+    sec.setAttribute('aria-label', cat.title);
+    var head = el('div', 'cat-head rv');
+    head.appendChild(hide(el('span', 'ln')));
     head.appendChild(el('h2', null, cat.title));
-    head.appendChild(el('span', 'ln')).setAttribute('aria-hidden', 'true');
+    head.appendChild(hide(el('span', 'ln')));
     sec.appendChild(head);
-
     cat.groups.forEach(function (g) {
-      var grp = el('div', 'group');
-      grp.appendChild(el('h3', null, g.title));
+      var grp = el('div', 'group rv');
+      var gh = el('div', 'group-head');
+      gh.appendChild(hide(el('span', 'dia')));
+      gh.appendChild(el('h3', null, g.title));
+      if (g.price) {
+        var chip = el('p', 'chip', g.price + ' ');
+        chip.appendChild(el('span', null, 'RSD'));
+        gh.appendChild(chip);
+      }
+      grp.appendChild(gh);
       g.items.forEach(function (it) {
         var row = el('div', 'row');
         var main = el('div', 'row-main');
         main.appendChild(el('p', 'n', it.n));
         if (it.s) main.appendChild(el('span', 's', it.s));
-        main.appendChild(el('span', 'dots')).setAttribute('aria-hidden', 'true');
+        main.appendChild(hide(el('span', 'dots')));
         if (it.p) {
           var p = el('p', 'p', it.p + ' ');
           p.appendChild(el('span', null, 'RSD'));
@@ -236,7 +342,7 @@ function buildMenu() {
         var ul = el('ul', 'premium');
         g.premium.forEach(function (name) {
           var li = el('li');
-          li.appendChild(el('span', 'dia')).setAttribute('aria-hidden', 'true');
+          li.appendChild(hide(el('span', 'dia')));
           li.appendChild(el('span', null, name));
           ul.appendChild(li);
         });
@@ -245,47 +351,89 @@ function buildMenu() {
       sec.appendChild(grp);
     });
     root.appendChild(sec);
+    sections.push(sec);
   });
+}
+
+/* kašnjenja za postepeni ulaz stavki */
+function setDelays(id) {
+  var step = id === 'sve' ? 1 : 0;
+  sections.forEach(function (sec) {
+    if (sec.hidden) return;
+    sec.querySelectorAll('.rv').forEach(function (r) {
+      r.style.setProperty('--d', Math.min(step, 8) * 70 + 'ms');
+      step++;
+    });
+  });
+}
+
+var tick = 0, revealed = false;
+var mainEl = document.getElementById('main');
+function replay() {
+  if (!revealed) return;
+  tick++;
+  mainEl.className = 'v' + (tick % 2);
 }
 
 function buildFilters() {
   var bar = document.getElementById('pills');
   FILTERS.forEach(function (f) {
-    var b = el('button', 'pill');
-    b.appendChild(el('span', null, f[1]));
+    var b = el('button', 'pill', f[1]);
     b.type = 'button';
     b.dataset.id = f[0];
     b.setAttribute('aria-pressed', f[0] === 'sve' ? 'true' : 'false');
-    b.addEventListener('click', function () { select(f[0]); });
+    b.addEventListener('click', function () { select(f[0], b); });
     bar.appendChild(b);
   });
 }
 
-function select(id) {
+function select(id, btn) {
   document.querySelectorAll('.pill').forEach(function (b) {
     b.setAttribute('aria-pressed', b.dataset.id === id ? 'true' : 'false');
   });
-  document.querySelectorAll('section.cat').forEach(function (s) {
-    s.hidden = !(id === 'sve' || s.dataset.cat === id);
-  });
+  sections.forEach(function (s) { s.hidden = !(id === 'sve' || s.dataset.cat === id); });
   document.getElementById('promo').hidden = id !== 'sve';
-  var nav = document.querySelector('nav');
-  if (window.scrollY > nav.offsetTop) window.scrollTo({ top: nav.offsetTop, behavior: 'smooth' });
+  setDelays(id);
+  replay();
+  if (btn && btn.scrollIntoView) btn.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+  var top = document.querySelector('.hero').offsetHeight;
+  if (Math.abs(window.scrollY - top) > 2) window.scrollTo({ top: top, behavior: 'smooth' });
 }
 
+/* meni se pojavljuje kad se skroluje do njega */
+function setupReveal() {
+  var nav = document.getElementById('meni');
+  function show() {
+    if (revealed) return;
+    revealed = true;
+    nav.classList.add('in');
+    mainEl.className = 'v0';
+  }
+  if (!('IntersectionObserver' in window)) { show(); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting || e.boundingClientRect.top < 0) { show(); io.disconnect(); }
+    });
+  }, { rootMargin: '0px 0px -12% 0px' });
+  io.observe(nav);
+}
+
+buildBeans();
 buildFilters();
 buildMenu();
+setDelays('sve');
+setupReveal();
 
-/* Logo se crta na canvas: Samsung Internet u dark modu zatamnjuje slike, ali canvas ne dira */
-(function () {
-  var img = document.getElementById('logo');
+/* Logo se crta na canvas: Samsung Internet u tamnom režimu zatamnjuje slike, ali canvas ne dira */
+document.querySelectorAll('.logo-img').forEach(function (img) {
   function draw() {
     try {
-      var w = img.clientWidth || 132, h = Math.round(w * img.naturalHeight / img.naturalWidth);
-      var dpr = window.devicePixelRatio || 1;
+      var w = img.clientWidth || 150, h = Math.round(w * img.naturalHeight / img.naturalWidth);
+      var dpr = Math.max(window.devicePixelRatio || 1, 2);
       var c = document.createElement('canvas');
       c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
-      c.style.width = w + 'px'; c.style.height = h + 'px'; c.style.display = 'block';
+      c.className = img.className;
+      c.style.width = '100%'; c.style.height = 'auto';
       c.setAttribute('role', 'img'); c.setAttribute('aria-label', img.alt);
       var ctx = c.getContext('2d');
       ctx.imageSmoothingQuality = 'high';
@@ -294,7 +442,7 @@ buildMenu();
     } catch (e) { /* ako ne uspe, ostaje obična slika */ }
   }
   if (img.complete && img.naturalWidth) draw(); else img.addEventListener('load', draw);
-})();
+});
 </script>
 </body>
 </html>
