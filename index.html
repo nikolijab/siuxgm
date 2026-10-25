@@ -83,6 +83,29 @@
   footer .ln{width:40px;height:1px;background:rgba(197,166,83,0.6)}
   footer .script{font-size:28px;color:var(--gold);margin:0}
   footer small{font-size:12px;color:var(--muted)}
+
+  /* ===== ZAŠTITA OD PRISILNOG DARK MODA =====
+     Pregledači (Samsung Internet, Chrome, Viber/Instagram/Messenger browser)
+     u dark modu prepravljaju "obične" boje, ali ne diraju slike/gradijente.
+     Zato su sve boje ispod zadate kao gradijent iste boje (izgleda identično). */
+  body{background-image:linear-gradient(#252525,#252525)}
+  nav{background-image:linear-gradient(#252525,#252525)}
+  .promo{background-image:linear-gradient(rgba(197,166,83,0.08),rgba(197,166,83,0.08))}
+  .dia,.bar,.plus,.pill[aria-pressed="true"]{background-image:linear-gradient(#C5A653,#C5A653)}
+  .cat-head .ln{background-image:linear-gradient(rgba(197,166,83,0.45),rgba(197,166,83,0.45))}
+  footer .ln{background-image:linear-gradient(rgba(197,166,83,0.6),rgba(197,166,83,0.6))}
+
+  .promo h2,.promo-price,.cat-head h2,.group h3,.row .p,footer .script,
+  .combo-item .n,.row .n,.premium li > span:last-child,header .script,.pill > span,.plus > span,
+  .promo-sub,.combo-item .s,.row .s,.row .d,footer small{
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .promo h2,.promo-price,.cat-head h2,.group h3,.row .p,footer .script{background-image:linear-gradient(#C5A653,#C5A653)}
+  .combo-item .n,.row .n,.premium li > span:last-child{background-image:linear-gradient(#EDE4D3,#EDE4D3)}
+  header .script,.pill > span{background-image:linear-gradient(#E3D9C5,#E3D9C5)}
+  .pill[aria-pressed="true"] > span,.plus > span{background-image:linear-gradient(#252525,#252525)}
+  .promo-sub{background-image:linear-gradient(rgba(227,217,197,0.7),rgba(227,217,197,0.7))}
+  .combo-item .s,.row .s,.row .d,footer small{background-image:linear-gradient(rgba(227,217,197,0.66),rgba(227,217,197,0.66))}
 </style>
 </head>
 <body>
@@ -108,7 +131,7 @@
     </div>
     <div class="combo">
       <div class="combo-item"><p class="n">Cedevita</p><p class="s">0,25</p></div>
-      <span class="plus" aria-hidden="true">+</span>
+      <span class="plus" aria-hidden="true"><span>+</span></span>
       <div class="combo-item"><p class="n">Espresso</p><p class="s">kafa</p></div>
     </div>
     <span class="dash" aria-hidden="true"></span>
@@ -250,7 +273,8 @@ function buildMenu() {
 function buildFilters() {
   var bar = document.getElementById('pills');
   FILTERS.forEach(function (f) {
-    var b = el('button', 'pill', f[1]);
+    var b = el('button', 'pill');
+    b.appendChild(el('span', null, f[1]));
     b.type = 'button';
     b.dataset.id = f[0];
     b.setAttribute('aria-pressed', f[0] === 'sve' ? 'true' : 'false');
