@@ -403,6 +403,18 @@ function select(id, btn) {
 
 /* kad uvodni ekran ode skroz gore, uklanja se — gost se više ne vraća na njega */
 var hero = document.querySelector('.hero'), heroGone = false;
+
+/* svaki ulazak / osvežavanje / skeniranje koda kreće od uvodnog ekrana:
+   browser ne sme da vrati staru poziciju skrola */
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
+window.addEventListener('pageshow', function (e) {
+  if (!e.persisted) return;            /* povratak "nazad" iz keša browsera */
+  hero.hidden = false;
+  heroGone = false;
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  window.addEventListener('scroll', onScroll, { passive: true });
+});
 function onScroll() {
   if (heroGone) return;
   var h = hero.offsetHeight, y = window.scrollY;
